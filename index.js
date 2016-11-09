@@ -9,10 +9,10 @@ module.exports = function(options) {
       ImportDeclaration: function(node) {
         options.removals.forEach(function(removal) {
           if(types.isLiteral(node.source, { value: removal.import })) {
-            let firstNode = node.specifiers && node.specifiers[0];
+            var firstNode = node.specifiers && node.specifiers[0];
             if(types.isImportDefaultSpecifier(firstNode)) {
-              removal.methods.forEach((method) => {
-                callPathsToRemove.push(`${firstNode.local.name}.${method}`);
+              removal.methods.forEach(function(method) {
+                callPathsToRemove.push(firstNode.local.name + '.' + method);
               });
             }
           }
@@ -21,9 +21,9 @@ module.exports = function(options) {
 
       CallExpression: function(node) {
         if(node.callee.type === 'MemberExpression') {
-          let callPath = getCallPath(node.callee);
+          var callPath = getCallPath(node.callee);
 
-          if(callPathsToRemove.includes(callPath)) {
+          if(callPathsToRemove.indexOf(callPath) !== -1) {
             this.dangerouslyRemove();
           }
         }
@@ -43,7 +43,7 @@ module.exports = function(options) {
 };
 
 function getCallPath(node) {
-  let leftSide = '';
+  var leftSide = '';
   if(node.object.type === 'Identifier') {
     leftSide = node.object.name;
   } else {
@@ -52,5 +52,5 @@ function getCallPath(node) {
     };
   }
 
-  return `${leftSide}.${node.property.name}`;
+  return leftSide + '.' + node.property.name;
 }
