@@ -1,7 +1,7 @@
 var stringify = require('json-stable-stringify');
 
 module.exports = function(options) {
-  function babelPluginFilterImports(babel) {
+  function plugin(babel) {
     var types = babel.types;
     var callPathsToRemove = [];
 
@@ -31,15 +31,15 @@ module.exports = function(options) {
     });
   };
 
-  babelPluginFilterImports.baseDir = function() {
+  plugin.baseDir = function() {
     return __dirname;
   };
 
-  babelPluginFilterImports.cacheKey = function() {
+  plugin.cacheKey = function() {
     return stringify(options);
   };
 
-  return babelPluginFilterImports;
+  return plugin;
 };
 
 function getCallPath(node) {
