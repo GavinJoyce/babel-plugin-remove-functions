@@ -4,6 +4,7 @@ This is a WIP and experimental implementation of https://github.com/ember-cli/rf
 
 Given the following configuration:
 
+
 ```js
 {
   enabled: true,
