@@ -1,5 +1,7 @@
 # babel-plugin-remove-functions
 
+https://travis-ci.org/GavinJoyce/babel-plugin-remove-functions.svg?branch=master
+
 This is a WIP and experimental implementation of https://github.com/ember-cli/rfcs/pull/50.
 
 Given the following configuration:
