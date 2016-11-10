@@ -38,6 +38,16 @@ describe('babel-plugin-remove-functions', function() {
     ]
   });
 
+  testFixture('no-methods', {
+    enabled: true,
+    removals: [
+      {
+        import: 'ember',
+        methods: []
+      }
+    ]
+  });
+
   it('provides a baseDir', function() {
     var expectedPath = path.join(__dirname, '..');
 
