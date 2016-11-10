@@ -3,9 +3,18 @@ var stringify = require('json-stable-stringify');
 module.exports = function(options) {
   function plugin(babel) {
     var types = babel.types;
-    var callPathsToRemove = [];
+    var callPathsToRemove;
 
     return new babel.Transformer('babel-plugin-remove-functions', {
+      Program: {
+        enter: function() {
+          callPathsToRemove = [];
+        },
+        exit: function() {
+          callPathsToRemove = undefined;
+        }
+      },
+
       ImportDeclaration: function(node) {
         options.removals.forEach(function(removal) {
           if(types.isLiteral(node.source, { value: removal.import })) {
@@ -20,6 +29,10 @@ module.exports = function(options) {
       },
 
       CallExpression: function(node) {
+        if(callPathsToRemove.length === 0) {
+          return;
+        }
+
         if(node.callee.type === 'MemberExpression') {
           var callPath = getCallPath(node.callee);
 
