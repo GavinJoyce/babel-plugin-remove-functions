@@ -22,10 +22,9 @@ function testFixture(name, options) {
 
 describe('babel-plugin-remove-functions', function() {
   testFixture('default', {
-    enabled: true,
     removals: [
       {
-        import: 'ember',
+        module: 'ember',
         methods: [
           'assert',
           'debug',
@@ -39,10 +38,9 @@ describe('babel-plugin-remove-functions', function() {
   });
 
   testFixture('no-methods', {
-    enabled: true,
     removals: [
       {
-        import: 'ember',
+        module: 'ember',
         methods: []
       }
     ]

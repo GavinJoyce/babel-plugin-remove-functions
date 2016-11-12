@@ -17,7 +17,7 @@ module.exports = function(options) {
 
       ImportDeclaration: function(node) {
         options.removals.forEach(function(removal) {
-          if(types.isLiteral(node.source, { value: removal.import })) {
+          if(types.isLiteral(node.source, { value: removal.module })) {
             var firstNode = node.specifiers && node.specifiers[0];
             if(types.isImportDefaultSpecifier(firstNode)) {
               removal.methods.forEach(function(method) {
