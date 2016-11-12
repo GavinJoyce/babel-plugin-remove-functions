@@ -15,6 +15,25 @@ module.exports = function(options) {
         }
       },
 
+      VariableDeclaration: function(node) {
+        node.declarations.forEach(function(declaration) {
+          var globalImport = declaration.init.name; //eg. `Ember` (from `const { debug } = Ember;`)
+
+          options.removals.forEach(function(removal) {
+            if(removal.global === globalImport) {
+              declaration.id.properties.forEach(function(property) {
+                //eg. const { warn: renamedWarn } = Ember;
+                //    =>: property.key.name => 'warn'
+                //    =>: property.value.name => 'renamedWarn'
+                if(removal.methods.indexOf(property.key.name) !== -1) {
+                  callPathsToRemove.push(property.value.name);
+                }
+              });
+            }
+          });
+        });
+      },
+
       ImportDeclaration: function(node) {
         options.removals.forEach(function(removal) {
           if(types.isLiteral(node.source, { value: removal.module })) {
@@ -39,6 +58,16 @@ module.exports = function(options) {
           if(callPathsToRemove.indexOf(callPath) !== -1) {
             this.dangerouslyRemove();
           }
+        }
+      },
+
+      ExpressionStatement: function(node) {
+        if(callPathsToRemove.length === 0) {
+          return;
+        }
+
+        if(callPathsToRemove.indexOf(node.expression.callee.name) !== -1) {
+          this.dangerouslyRemove();
         }
       }
     });
