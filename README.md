@@ -11,7 +11,7 @@ Given the following configuration:
   enabled: true,
   removals: [
     {
-      import: 'ember',
+      module: 'ember',
       methods: [
         'assert',
         'debug',
