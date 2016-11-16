@@ -8,7 +8,6 @@ Given the following configuration:
 
 ```js
 {
-  enabled: true,
   removals: [
     {
       module: 'ember',

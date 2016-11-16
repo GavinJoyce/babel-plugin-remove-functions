@@ -16,7 +16,7 @@ function testFixture(name, options) {
       plugins: [plugin(options)]
     });
 
-    assert.strictEqual(result.code.trim(), expected.trim());
+    assert.strictEqual(expected.trim(), result.code.trim());
   });
 }
 
@@ -42,6 +42,19 @@ describe('babel-plugin-remove-functions', function() {
       {
         module: 'ember',
         methods: []
+      }
+    ]
+  });
+
+  testFixture('destructuring', {
+    removals: [
+      {
+        global: 'Ember',
+        methods: ['assert', 'deprecate', 'debug', 'warn']
+      },
+      {
+        global: 'OtherThing',
+        methods: ['doSomething']
       }
     ]
   });
