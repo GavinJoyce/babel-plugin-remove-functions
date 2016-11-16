@@ -49,11 +49,11 @@ describe('babel-plugin-remove-functions', function() {
   testFixture('destructuring', {
     removals: [
       {
-        global: 'Ember',
+        module: 'Ember',
         methods: ['assert', 'deprecate', 'debug', 'warn']
       },
       {
-        global: 'OtherThing',
+        module: 'OtherThing',
         methods: ['doSomething']
       }
     ]
