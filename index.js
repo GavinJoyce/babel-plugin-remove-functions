@@ -17,10 +17,10 @@ module.exports = function(options) {
 
       VariableDeclaration: function(node) {
         node.declarations.forEach(function(declaration) {
-          var globalImport = declaration.init.name; //eg. `Ember` (from `const { debug } = Ember;`)
+          var importName = declaration.init.name; //eg. `Ember` (from `const { debug } = Ember;`)
 
           options.removals.forEach(function(removal) {
-            if(removal.global === globalImport) {
+            if(removal.module === importName) {
               declaration.id.properties.forEach(function(property) {
                 //eg. const { warn: renamedWarn } = Ember;
                 //    =>: property.key.name => 'warn'
