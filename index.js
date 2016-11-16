@@ -24,20 +24,24 @@ module.exports = function(options) {
 
       VariableDeclaration: function(node) {
         node.declarations.forEach(function(declaration) {
-          var importName = declaration.init.name; //eg. `Ember` (from `const { debug } = Ember;`)
+          if(declaration.init) {
+            var importName = declaration.init.name; //eg. `Ember` (from `const { debug } = Ember;`)
 
-          options.removals.forEach(function(removal) {
-            if(removal.module === importName) {
-              declaration.id.properties.forEach(function(property) {
-                //eg. const { warn: renamedWarn } = Ember;
-                //    =>: property.key.name => 'warn'
-                //    =>: property.value.name => 'renamedWarn'
-                if(removal.methods.indexOf(property.key.name) !== -1) {
-                  callPathsToRemove.push(property.value.name);
+            options.removals.forEach(function(removal) {
+              if(removal.module === importName) {
+                if(declaration.id && declaration.id.properties) {
+                  declaration.id.properties.forEach(function(property) {
+                    //eg. const { warn: renamedWarn } = Ember;
+                    //    =>: property.key.name => 'warn'
+                    //    =>: property.value.name => 'renamedWarn'
+                    if(removal.methods.indexOf(property.key.name) !== -1) {
+                      callPathsToRemove.push(property.value.name);
+                    }
+                  });
                 }
-              });
-            }
-          });
+              }
+            });
+          }
         });
       },
 
@@ -70,6 +74,10 @@ module.exports = function(options) {
 
       ExpressionStatement: function(node) {
         if(callPathsToRemove.length === 0) {
+          return;
+        }
+
+        if(!node.expression.callee) {
           return;
         }
 
