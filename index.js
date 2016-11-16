@@ -9,6 +9,13 @@ module.exports = function(options) {
       Program: {
         enter: function() {
           callPathsToRemove = [];
+          options.removals.forEach(function(removal) {
+            if(removal.global) {
+              removal.methods.forEach(function(method) {
+                callPathsToRemove.push(removal.global + '.' + method);
+              });
+            }
+          });
         },
         exit: function() {
           callPathsToRemove = undefined;
