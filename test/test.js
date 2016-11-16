@@ -59,6 +59,15 @@ describe('babel-plugin-remove-functions', function() {
     ]
   });
 
+  testFixture('global-namespace', {
+    removals: [
+      {
+        global: 'Ember',
+        methods: ['assert', 'deprecate', 'debug', 'warn']
+      }
+    ]
+  });
+
   it('provides a baseDir', function() {
     var expectedPath = path.join(__dirname, '..');
 
