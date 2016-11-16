@@ -79,6 +79,11 @@ export default Ember.Component.extend({
   }
 });
 ```
+
+### Development
+
+Use [astexplorer.net](https://astexplorer.net/) for exploring and experimenting with the Babel AST.
+
 ---
 
 This is based on [babel-plugin-filter-imports](https://github.com/ember-cli/babel-plugin-filter-imports) by [mmum](https://github.com/mmun).
