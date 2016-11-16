@@ -68,6 +68,15 @@ describe('babel-plugin-remove-functions', function() {
     ]
   });
 
+  testFixture('kitchen-sink', {
+    removals: [
+      {
+        global: 'Ember',
+        methods: ['assert', 'deprecate', 'debug', 'warn']
+      }
+    ]
+  });
+
   it('provides a baseDir', function() {
     var expectedPath = path.join(__dirname, '..');
 
