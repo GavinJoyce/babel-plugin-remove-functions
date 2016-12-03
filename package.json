@@ -4,6 +4,7 @@
   "description": "Remove code from ember-cli builds",
   "main": "index.js",
   "scripts": {
+    "build": "babel src/index.js --out-file index.js",
     "test": "mocha"
   },
   "repository": {
@@ -21,7 +22,7 @@
   },
   "homepage": "https://github.com/GavinJoyce/ember-cli-code-removal",
   "devDependencies": {
-    "babel-core": "^5.5.3",
+    "babel": "^5.8.38",
     "mocha": "^2.2.5"
   },
   "dependencies": {
