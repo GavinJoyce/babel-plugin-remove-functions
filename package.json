@@ -2,11 +2,11 @@
   "name": "babel-plugin-remove-functions",
   "version": "0.2.1",
   "description": "Remove code from ember-cli builds",
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
-    "build": "babel src/index.js --out-file index.js",
-    "test": "npm run build && mocha test",
-    "prepublish": "npm run build"
+    "compile": "babel src --out-dir lib",
+    "test": "npm run compile && mocha test",
+    "prepublish": "npm run compile"
   },
   "repository": {
     "type": "git",

@@ -2,7 +2,7 @@ var assert = require('assert');
 var fs = require('fs');
 var path = require('path');
 var babel = require('babel-core');
-var plugin = require('../index');
+var plugin = require('../lib/index');
 
 function testFixture(name, options) {
   it(name, function () {
@@ -78,7 +78,7 @@ describe('babel-plugin-remove-functions', function() {
   });
 
   it('provides a baseDir', function() {
-    var expectedPath = path.join(__dirname, '..');
+    var expectedPath = path.join(__dirname, '../lib');
 
     var instance = plugin({ assert: ['default'] });
 
