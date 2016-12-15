@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-remove-functions",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Remove code from ember-cli builds",
   "main": "lib/index.js",
   "scripts": {

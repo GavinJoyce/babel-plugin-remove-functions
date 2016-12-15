@@ -47,7 +47,7 @@ module.exports = function(options) {
 
       VariableDeclaration: function(node) {
         //TODO: GJ: move some of this into State
-        
+
         //eg. `const { assert, deprecate } = Ember;`
         node.declarations.forEach((declaration) => {
           if(declaration.init) {
@@ -76,7 +76,7 @@ module.exports = function(options) {
   };
 
   plugin.baseDir = function() {
-    return __dirname;
+    return `${__dirname}/../`;
   };
 
   plugin.cacheKey = function() {
