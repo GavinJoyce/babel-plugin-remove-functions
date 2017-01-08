@@ -78,7 +78,7 @@ describe('babel-plugin-remove-functions', function() {
   });
 
   it('provides a baseDir', function() {
-    var expectedPath = path.join(__dirname, '../lib');
+    var expectedPath = path.join(__dirname, '../');
 
     var instance = plugin({ assert: ['default'] });
 

@@ -52,7 +52,7 @@ export default class State {
     return this.importLocalToSourceMap[local];
   }
 
-  showRemoveCallPath(path) {
+  shouldRemoveCallPath(path) {
     return this.callPathsToRemove.has(path);
   }
 };

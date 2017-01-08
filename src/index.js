@@ -1,4 +1,5 @@
 import State from './state';
+var path = require('path');
 
 var stringify = require('json-stable-stringify');
 
@@ -30,7 +31,7 @@ module.exports = function(options) {
         }
 
         let callPath = node.expression.callee.name;
-        if(state.showRemoveCallPath(callPath)) {
+        if(state.shouldRemoveCallPath(callPath)) {
           this.dangerouslyRemove();
         }
       },
@@ -39,7 +40,7 @@ module.exports = function(options) {
         if(node.callee.type === 'MemberExpression') {
           let callPath = getCallPath(node.callee);
 
-          if(state.showRemoveCallPath(callPath)) {
+          if(state.shouldRemoveCallPath(callPath)) {
             this.dangerouslyRemove();
           }
         }
@@ -76,7 +77,7 @@ module.exports = function(options) {
   };
 
   plugin.baseDir = function() {
-    return __dirname;
+    return path.join(__dirname, '../');
   };
 
   plugin.cacheKey = function() {
