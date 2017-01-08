@@ -1,3 +1,5 @@
+import Ember from 'ember';
+
 const {
   assert,
   deprecate
@@ -6,6 +8,8 @@ const {
 const { debug } = Ember;
 
 const { warn: renamedWarn } = Ember;
+
+import OtherThing from 'other-thing';
 
 const { doSomething } = OtherThing;
 

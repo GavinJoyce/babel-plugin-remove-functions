@@ -2,7 +2,7 @@ var assert = require('assert');
 var fs = require('fs');
 var path = require('path');
 var babel = require('babel-core');
-var plugin = require('../index');
+var plugin = require('../lib/index');
 
 function testFixture(name, options) {
   it(name, function () {
@@ -16,7 +16,7 @@ function testFixture(name, options) {
       plugins: [plugin(options)]
     });
 
-    assert.strictEqual(expected.trim(), result.code.trim());
+    assert.strictEqual(result.code.trim(), expected.trim());
   });
 }
 
@@ -25,7 +25,7 @@ describe('babel-plugin-remove-functions', function() {
     removals: [
       {
         module: 'ember',
-        methods: [
+        paths: [
           'assert',
           'debug',
           'deprecate',
@@ -41,7 +41,7 @@ describe('babel-plugin-remove-functions', function() {
     removals: [
       {
         module: 'ember',
-        methods: []
+        paths: []
       }
     ]
   });
@@ -49,12 +49,12 @@ describe('babel-plugin-remove-functions', function() {
   testFixture('destructuring', {
     removals: [
       {
-        module: 'Ember',
-        methods: ['assert', 'deprecate', 'debug', 'warn']
+        module: 'ember',
+        paths: ['assert', 'deprecate', 'debug', 'warn']
       },
       {
-        module: 'OtherThing',
-        methods: ['doSomething']
+        module: 'other-thing',
+        paths: ['doSomething']
       }
     ]
   });
@@ -63,7 +63,7 @@ describe('babel-plugin-remove-functions', function() {
     removals: [
       {
         global: 'Ember',
-        methods: ['assert', 'deprecate', 'debug', 'warn']
+        paths: ['assert', 'deprecate', 'debug', 'warn']
       }
     ]
   });
@@ -72,13 +72,13 @@ describe('babel-plugin-remove-functions', function() {
     removals: [
       {
         global: 'Ember',
-        methods: ['assert', 'deprecate', 'debug', 'warn']
+        paths: ['assert', 'deprecate', 'debug', 'warn']
       }
     ]
   });
 
   it('provides a baseDir', function() {
-    var expectedPath = path.join(__dirname, '..');
+    var expectedPath = path.join(__dirname, '../lib');
 
     var instance = plugin({ assert: ['default'] });
 
