@@ -76,7 +76,7 @@ module.exports = function(options) {
   };
 
   plugin.baseDir = function() {
-    return `${__dirname}/../`;
+    return __dirname;
   };
 
   plugin.cacheKey = function() {
