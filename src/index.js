@@ -1,60 +1,99 @@
-import State from './state';
-var path = require('path');
+let path = require('path');
+let stringify = require('json-stable-stringify');
 
-var stringify = require('json-stable-stringify');
+module.exports = function({ types }) {
+  let configuration;
+  let callPathsToRemove = new Set();
+  let importLocalToSourceMap = new Map();
 
-module.exports = function(options) {
-  function plugin(babel) {
-    let state = new State(options);
-    var types = babel.types;
-    var callPathsToRemove;
+  let shouldRemoveCallPath = (path) => {
+    return callPathsToRemove.has(path);
+  };
 
-    return new babel.Transformer('babel-plugin-remove-functions', {
+  let getImportSourceFromLocal = (local) => {
+    // eg. `import Ember from 'ember';`
+    // 'ember' is the source
+    // 'Ember' is the local
+    return importLocalToSourceMap[local];
+  }
+
+  return {
+    visitor: {
       Program: {
-        enter() {
-          state.enter();
+        enter(path, s) {
+          configuration = s.opts;
+
+          callPathsToRemove.clear();
+          importLocalToSourceMap.clear();
+
+          //TODO: GJ: PERF: construct this once and reuse
+          configuration.removals.forEach(removal => {
+            if(removal.global) {
+              removal.paths.forEach(method => callPathsToRemove.add(`${removal.global}.${method}`));
+            }
+          });
         },
+
         exit() {
-          state.exit();
+
         }
       },
 
-      ImportDeclaration: function(node) {
+      ImportDeclaration: function(path) {
+        let node = path.node;
+
         node.specifiers.forEach((specifier) => {
-          state.importSpecifier(specifier.type, node.source.value, specifier.local.name);
+          let type = specifier.type;
+
+          if(type === 'ImportDefaultSpecifier') {
+            let source = node.source.value;
+            let local = specifier.local.name;
+
+            importLocalToSourceMap[local] = source;
+
+            configuration.removals.forEach(removal => {
+              if(removal.module === source) {
+                removal.paths.forEach(method => callPathsToRemove.add(`${local}.${method}`));
+              }
+            });
+          }
         });
       },
 
-      ExpressionStatement: function(node) {
+      ExpressionStatement: function(path) {
+        let node = path.node;
         if(!node.expression.callee || !node.expression.callee.name) {
           return;
         }
 
         let callPath = node.expression.callee.name;
-        if(state.shouldRemoveCallPath(callPath)) {
-          this.dangerouslyRemove();
+
+        if(shouldRemoveCallPath(callPath)) {
+          path.remove();
         }
       },
 
-      CallExpression: function(node) {
+      CallExpression: function(path) {
+        let node = path.node;
+
         if(node.callee.type === 'MemberExpression') {
           let callPath = getCallPath(node.callee);
 
-          if(state.shouldRemoveCallPath(callPath)) {
-            this.dangerouslyRemove();
+          if(shouldRemoveCallPath(callPath)) {
+            path.remove();
           }
         }
       },
 
-      VariableDeclaration: function(node) {
-        //TODO: GJ: move some of this into State
+      //eg. `const { assert, deprecate } = Ember;`
+      VariableDeclaration: function(path, s) {
+        let node = path.node;
 
-        //eg. `const { assert, deprecate } = Ember;`
         node.declarations.forEach((declaration) => {
-          if(declaration.init) {
-            let importSource = state.getImportSourceFromLocal(declaration.init.name);
+          if(declaration.init) { //does it have an
+            let importSource = getImportSourceFromLocal(declaration.init.name);
 
-            options.removals.forEach((removal) => {
+            configuration.removals.forEach((removal) => {
               if(removal.module === importSource) {
 
                 if(declaration.id && declaration.id.properties) {
@@ -63,7 +102,7 @@ module.exports = function(options) {
                     //    =>: property.key.name => 'warn'
                     //    =>: property.value.name => 'renamedWarn'
                     if(removal.paths.indexOf(property.key.name) !== -1) {
-                      state.callPathsToRemove.add(property.value.name);
+                      callPathsToRemove.add(property.value.name);
                     }
                   });
                 }
@@ -73,19 +112,12 @@ module.exports = function(options) {
         });
       }
 
-    });
+    }
   };
-
-  plugin.baseDir = function() {
-    return path.join(__dirname, '../');
-  };
-
-  plugin.cacheKey = function() {
-    return stringify(options);
-  };
-
-  return plugin;
 };
+
+module.exports.baseDir = function() { return path.join(__dirname, '../'); };
+// module.exports.cacheKey = function() { return stringify(options); };
 
 function getCallPath(node) {
   var leftSide = '';

@@ -1,3 +1,3 @@
-var _ember = require('ember');
+import Ember from 'ember';
 
-_ember['default'].isEqual('this will not be removed', 'ok?');
+Ember.isEqual('this will not be removed', 'ok?');

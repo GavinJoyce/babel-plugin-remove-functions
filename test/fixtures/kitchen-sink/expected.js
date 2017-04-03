@@ -1,6 +1,6 @@
 var someObject = {
   someProperty: null,
-  someFunction: function someFunction(argument) {}
+  someFunction: function (argument) {}
 };
 
 someVariable = 4;
