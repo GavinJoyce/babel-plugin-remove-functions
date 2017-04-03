@@ -1,26 +1,26 @@
-var _ember = require('ember');
+import Ember from 'ember';
 
-_ember['default'].assert('this will remain');
-_ember['default'].assert('this will remain', true);
+Ember.assert('this will remain');
+Ember.assert('this will remain', true);
 
-_ember['default'].debug('this will remain');
+Ember.debug('this will remain');
 
-_ember['default'].deprecate('this will remain', false, {
+Ember.deprecate('this will remain', false, {
   id: 'test-deprecation',
   until: '3.0.0',
   url: 'http://foo.com'
 });
 
-_ember['default'].info('this will remain');
+Ember.info('this will remain');
 
-_ember['default'].runInDebug(function () {
-  _ember['default'].Component.reopen({
-    didInsertElement: function didInsertElement() {
+Ember.runInDebug(() => {
+  Ember.Component.reopen({
+    didInsertElement() {
       console.log('this will all remain');
     }
   });
 });
 
-_ember['default'].warn('this will remain');
+Ember.warn('this will remain');
 
-_ember['default'].isEqual('this will remain', 'ok?');
+Ember.isEqual('this will remain', 'ok?');

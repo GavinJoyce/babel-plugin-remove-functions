@@ -5,15 +5,11 @@ Ember.assert('this will remain', true);
 
 Ember.debug('this will remain');
 
-Ember.deprecate(
-  'this will remain',
-  false,
-  {
-    id: 'test-deprecation',
-    until: '3.0.0',
-    url: 'http://foo.com'
-  }
-);
+Ember.deprecate('this will remain', false, {
+  id: 'test-deprecation',
+  until: '3.0.0',
+  url: 'http://foo.com'
+});
 
 Ember.info('this will remain');
 

@@ -1,6 +1,6 @@
-var _ember = require('ember');
+import Em from 'ember';
 
-_ember['default'].debug('this will NOT be removed');
+Em.debug('this will NOT be removed');
 warn('this will NOT be removed');
 info('this will NOT be removed');
 

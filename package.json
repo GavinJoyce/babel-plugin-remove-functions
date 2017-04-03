@@ -23,8 +23,10 @@
   },
   "homepage": "https://github.com/GavinJoyce/ember-cli-code-removal",
   "devDependencies": {
-    "babel": "^5.8.38",
-    "mocha": "^2.2.5"
+    "babel-cli": "^6.24.0",
+    "babel-core": "^6.9.1",
+    "babel-preset-es2015": "^6.24.0",
+    "mocha": "^3.0.0"
   },
   "dependencies": {
     "json-stable-stringify": "^1.0.1"
